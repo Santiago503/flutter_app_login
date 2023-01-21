@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/screens/screen.dart';
+import 'package:flutter_application_1/services/services.dart';
+import 'package:provider/provider.dart';
 
-import 'screens/home_screen.dart';
-import 'screens/login_screen.dart';
+void main() => runApp(const AppState());
 
-void main() {
-  runApp(const MyApp());
+class AppState extends StatelessWidget {
+  const AppState({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => ProductService(),)],
+      child: const MyApp(),
+    );
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -16,11 +25,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Material App',
       debugShowCheckedModeBanner: false,
-      initialRoute: 'login',
+      initialRoute: 'home',
       routes: {
         'login': (_) => const LoginScreen(),
         'home': (_) => const HomeScreen(),
+        'product': (_) => const ProductScreen(),
       },
+      theme: ThemeData.light().copyWith(
+          scaffoldBackgroundColor: Colors.grey[300],
+          appBarTheme: const AppBarTheme(elevation: 0, color: Colors.indigo)),
     );
   }
 }

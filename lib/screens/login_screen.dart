@@ -75,8 +75,8 @@ class _LoginForm extends StatelessWidget {
                               await Future.delayed(const Duration(seconds: 3));
                               loginForm.isLoading = false;
 
+                              // ignore: use_build_context_synchronously
                               Navigator.pushReplacementNamed(context, 'home');
-                              print('Login Hello');
                             },
                       child: Container(
                         padding:
