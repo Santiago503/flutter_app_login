@@ -3,13 +3,12 @@ import 'package:flutter_application_1/providers/login_form_provider.dart';
 import 'package:flutter_application_1/services/services.dart';
 import 'package:provider/provider.dart';
 
-import '../services/auth_service.dart';
 import '../widgets/auth_background.dart';
 import '../widgets/card_container.dart';
 import '../widgets/input_decoration.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class RegisterScreen extends StatelessWidget {
+  const RegisterScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,24 +27,24 @@ class LoginScreen extends StatelessWidget {
 
   TextButton _textButton(BuildContext context) {
     return TextButton(
-        onPressed: (() => Navigator.pushReplacementNamed(context, 'register')),
+        onPressed: (() => Navigator.pushReplacementNamed(context, 'login')),
         style: ButtonStyle(
             overlayColor:
                 MaterialStateProperty.all(Colors.indigo.withOpacity(0.1)),
             shape: MaterialStateProperty.all(const StadiumBorder())),
         child: const Text(
-          'Crear una nueva cuenta',
+          'Ya tienes una cuenta?',
           style: TextStyle(
               fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
         ));
   }
 
-  CardContainer _cardContainer(BuildContext context) {
+CardContainer _cardContainer(BuildContext context) {
     return CardContainer(
         child: Column(
       children: [
         const SizedBox(height: 10),
-        Text('Login', style: Theme.of(context).textTheme.headline4),
+        Text('Registrarse', style: Theme.of(context).textTheme.headline4),
         const SizedBox(height: 30),
         ChangeNotifierProvider(
             create: (_) => LoginFormProvider(), child: _LoginForm()),
@@ -59,6 +58,7 @@ class _LoginForm extends StatelessWidget {
   Widget build(BuildContext context) {
     final loginForm = Provider.of<LoginFormProvider>(context);
     final authService = Provider.of<AuthService>(context);
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 5),
       child: Form(
@@ -80,18 +80,22 @@ class _LoginForm extends StatelessWidget {
                     ? null
                     : () async {
                         FocusScope.of(context).unfocus();
+
                         if (loginForm.isValidForm() == false) return;
                         loginForm.isLoading = true;
 
-                        final String? msg = await authService.login(
-                            loginForm.email, loginForm.password);
+                        //await Future.delayed(const Duration(seconds: 3));
 
+                        final String? msg = await authService.createUser(
+                            loginForm.email, loginForm.password);
 
                         if (msg == null) {
                           // ignore: use_build_context_synchronously
                           Navigator.pushReplacementNamed(context, 'home');
+                          NotificationService.shoSnackBar('Login');
+
                         } else {
-                          NotificationService.shoSnackBar(msg);
+                            NotificationService.shoSnackBar(msg);
                         }
 
                         loginForm.isLoading = false;
@@ -102,7 +106,7 @@ class _LoginForm extends StatelessWidget {
                   child: Text(loginForm.isLoading ? 'Cargando' : 'Ingresar',
                       style: const TextStyle(color: Colors.white)),
                 ),
-              ),
+              )
             ],
           )),
     );

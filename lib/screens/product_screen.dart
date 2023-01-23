@@ -63,7 +63,6 @@ class _ProductScreenBody extends StatelessWidget {
                             preferredCameraDevice: CameraDevice.rear,
                             source: ImageSource.camera,
                             imageQuality: 100);
-                        print(pikedFile);
 
                         if (pikedFile == null) {
                           print('no seleciono nada');
@@ -197,3 +196,5 @@ class _ProductForm extends StatelessWidget {
       borderRadius: BorderRadius.only(
           bottomRight: Radius.circular(25), bottomLeft: Radius.circular(25)));
 }
+
+
